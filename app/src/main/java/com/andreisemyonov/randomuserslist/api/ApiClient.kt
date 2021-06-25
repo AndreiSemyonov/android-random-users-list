@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
 
-    var BASE_URL = "https://randomuser.me/"
+    private var BASE_URL = "https://randomuser.me/"
 
     private var retrofit: Retrofit? = null
 
