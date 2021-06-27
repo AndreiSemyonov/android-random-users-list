@@ -47,4 +47,8 @@ class Adapter(private val context: Context, private var resultList: List<Result>
 
         val binding = UserPhotoViewHolderBinding.bind(itemView)
     }
+
+    interface ItemClickListener {
+        fun onClick(view: View?, position: Int)
+    }
 }
