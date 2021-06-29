@@ -1,11 +1,14 @@
 package com.andreisemyonov.randomuserslist.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.andreisemyonov.randomuserslist.R
+import com.andreisemyonov.randomuserslist.UserActivity
+import com.andreisemyonov.randomuserslist.common.Common
 import com.andreisemyonov.randomuserslist.databinding.UserPhotoViewHolderBinding
 import com.andreisemyonov.randomuserslist.model.Result
 import com.bumptech.glide.Glide
@@ -30,6 +33,24 @@ class Adapter(private val context: Context, private var resultList: List<Result>
                     .circleCrop()
                     .into(binding.imageView)
         }
+
+        holder.setItemClickListener(object : ItemClickListener {
+
+            override fun onClick(view: View?, position: Int) {
+
+                Common.selected_user_photo = resultList!![position].picture.large
+                Common.selected_user_first_name = resultList!![position].name.first
+                Common.selected_user_last_name = resultList!![position].name.last
+                Common.selected_user_age = resultList!![position].age.age
+                Common.selected_user_country = resultList!![position].location.country
+                Common.selected_user_city = resultList!![position].location.city
+                Common.selected_user_email = resultList!![position].email
+
+                val intent = Intent(context, UserActivity::class.java)
+
+                context.startActivity(intent)
+            }
+        })
     }
 
     override fun getItemCount(): Int {
@@ -43,9 +64,23 @@ class Adapter(private val context: Context, private var resultList: List<Result>
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener{
 
         val binding = UserPhotoViewHolderBinding.bind(itemView)
+
+        private var itemClickListener: ItemClickListener? = null
+
+        fun setItemClickListener(itemClickListener: ItemClickListener) {
+            this.itemClickListener = itemClickListener
+        }
+
+        override fun onClick(v: View) {
+            itemClickListener?.onClick(v, adapterPosition)
+        }
+
+        init {
+            itemView.setOnClickListener(this)
+        }
     }
 
     interface ItemClickListener {
